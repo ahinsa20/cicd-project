@@ -1,0 +1,26 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        'gcr.io/asterproject-385417/cicd-project:$SHORT_SHA',
+        '.',
+      ]
+   - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'gcr.io/asterproject-385417/cicd-project:$SHORT_SHA',
+      ]    
+    - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'beta',
+        'run',
+        'deploy',
+        'cicd-project',
+        '--image=gcr.io/asterproject-385417/cicd-project:$SHORT_SHA',
+        '--region=asia-south1',
+        '--platform=managed'
+      ]   
